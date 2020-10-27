@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 // instructions for students: clone this project, open the VlambeerLabScene, and then start working on this script
 // based on: Vlambeer's level generation system for Nuclear Throne https://indienova.com/u/root/blogread/1766
 
@@ -14,22 +15,47 @@ public class FloorMaker : MonoBehaviour {
 //	Declare a private integer called myCounter that starts at 0; 		// count how many floor tiles this FloorMaker has instantiated
 //	Declare a public Transform called floorPrefab, assign the prefab in inspector;
 //	Declare a public Transform called floorMakerPrefab, assign the prefab in inspector; 
-
-	void Update () {
-//		If counter is less than 50, then:
-//			Generate a random number from 0.0f to 1.0f;
-//			If random number is less than 0.25f, then rotate myself 90 degrees on Z axis;
-//				... Else if number is 0.25f-0.5f, then rotate myself -90 degrees on Z axis;
-//				... Else if number is 0.99f-1.0f, then instantiate a floorMakerPrefab clone at my current position;
-//			// end elseIf
-
-//			Instantiate a floorPrefab clone at current position;
-//			Move 1 unit "upwards" based on this object's local rotation (e.g. with rotation 0,0,0 "upwards" is (0,1,0)... but with rotation 0,0,180 then "upwards" is (0,-1, 0)... )
-//			Increment counter;
-//		Else:
-//			Destroy my game object; 		// self destruct if I've made enough tiles already
+public Transform floorPreFab;
+public Transform floorMakerPreFab;
+ public static int myCounter;
+	private void Start(){
+		GetComponent<SpriteRenderer>();
 	}
+	void Update () {
+		//If counter is less than 50, then:
+		if(myCounter < 500){
+			Debug.Log(myCounter);
+			//Generate a random number from 0.0f to 1.0f;
+			float myRotation = Random.Range(0.0f,1.0f);
+			//If random number is less than 0.25f, then rotate myself 90 degrees on Z axis;
+			if(myRotation < 0.25f){
+				transform.Rotate(0, 0, 90f);
+			//... Else if number is 0.25f-0.5f, then rotate myself -90 degrees on Z axis;
+			}else if (0.6f < myRotation && myRotation < 0.5f){
+				transform.Rotate(0, 0, -90);
+			//... Else if number is 0.99f-1.0f, then instantiate a floorMakerPrefab clone at my current position;
+			}else if (0.99f < myRotation && myRotation < -1.0f){
+				Instantiate(floorMakerPreFab, transform.position, Quaternion.Euler(0f,0f,0f));
+			}
+			//end elseIf
 
+			//Instantiate a floorPrefab clone at current position;
+			Instantiate(floorPreFab, transform.position,Quaternion.Euler(0f,0f,0f));
+			//Move 1 unit "upwards" based on this object's local rotation (e.g. with rotation 0,0,0 "upwards" is (0,1,0)... but with rotation 0,0,180 then "upwards" is (0,-1, 0)... )
+			transform.Translate(0f, 1f, 0f);
+			//Increment counter;
+			myCounter++;
+			//transform.Translate(new Vector3(0, 5f, 0));
+		//Else:
+		}//else{
+			//Destroy my game object; // self destruct if I've made enough tiles already
+			//Destroy (gameObject);
+		//}
+		if(Input.GetKeyDown("r")){
+			myCounter = 0;
+			Debug.Log("hi");
+		}
+	}
 } // don't delete, end of FloorMaker class
 
 
